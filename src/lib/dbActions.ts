@@ -5,19 +5,34 @@ import { hash } from 'bcrypt';
 import { redirect } from 'next/navigation';
 import { prisma } from './prisma';
 
+type AddStuffInput = {
+  name: string;
+  quantity: number;
+  value: number;
+  owner: string;
+  condition: string;
+};
+
 /**
  * Adds a new stuff to the database.
  * @param stuff, an object with the following properties: name, quantity, owner, condition.
  */
-export async function addStuff(stuff: { name: string; quantity: number; owner: string; condition: string }) {
+export async function addStuff(stuff: AddStuffInput) {
   // console.log(`addStuff data: ${JSON.stringify(stuff, null, 2)}`);
-  let condition: Condition = 'good';
-  if (stuff.condition === 'poor') {
-    condition = 'poor';
-  } else if (stuff.condition === 'excellent') {
-    condition = 'excellent';
-  } else {
-    condition = 'fair';
+  let condition: Condition;
+  switch (stuff.condition) {
+    case 'poor':
+      condition = 'poor';
+      break;
+    case 'excellent':
+      condition = 'excellent';
+      break;
+    case 'fair':
+      condition = 'fair';
+      break;
+    default:
+      condition = 'good';
+      break;
   }
   await prisma.stuff.create({
     data: {
@@ -25,6 +40,7 @@ export async function addStuff(stuff: { name: string; quantity: number; owner: s
       quantity: stuff.quantity,
       owner: stuff.owner,
       condition,
+      value: stuff.value,
     },
   });
   // After adding, redirect to the list page
@@ -44,6 +60,7 @@ export async function editStuff(stuff: Stuff) {
       quantity: stuff.quantity,
       owner: stuff.owner,
       condition: stuff.condition,
+      value: stuff.value,
     },
   });
   // After updating, redirect to the list page

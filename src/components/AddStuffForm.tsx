@@ -10,7 +10,7 @@ import { addStuff } from '@/lib/dbActions';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import { AddStuffSchema } from '@/lib/validationSchemas';
 
-const onSubmit = async (data: { name: string; quantity: number; owner: string; condition: string }) => {
+const onSubmit = async (data: { name: string; quantity: number; value: number; owner: string; condition: string }) => {
   // console.log(`onSubmit data: ${JSON.stringify(data, null, 2)}`);
   await addStuff(data);
   swal('Success', 'Your item has been added', 'success', {
@@ -64,6 +64,17 @@ const AddStuffForm: React.FC = () => {
                     className={`form-control ${errors.quantity ? 'is-invalid' : ''}`}
                   />
                   <div className="invalid-feedback">{errors.quantity?.message}</div>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Value</Form.Label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    {...register('value')}
+                    className={`form-control ${errors.value ? 'is-invalid' : ''}`}
+                  />
+                  <div className="invalid-feedback">{errors.value?.message}</div>
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Condition</Form.Label>

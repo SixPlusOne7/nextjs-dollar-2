@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Stuff" ADD COLUMN     "value" DOUBLE PRECISION NOT NULL DEFAULT 0;
